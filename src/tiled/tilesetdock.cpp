@@ -57,6 +57,7 @@
 #include <QComboBox>
 #include <QDropEvent>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QHBoxLayout>
 #include <QMenu>
 #include <QMessageBox>
@@ -69,7 +70,6 @@
 #include <QToolButton>
 #include <QUrl>
 #include <QVBoxLayout>
-#include <QFileInfo>
 
 #include <functional>
 
@@ -170,7 +170,7 @@ static QString tabTitle(const TilesetDocument *tilesetDocument)
 {
     QString title = tilesetDocument->tileset()->name();
     if (title.isEmpty())
-        title = QFileInfo(tilesetDocument->externalOrEmbeddedFileName()).fileName();
+        title = tilesetDocument->displayName();
     return title;
 }
 
