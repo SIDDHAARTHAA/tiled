@@ -149,13 +149,14 @@ ExportDetails<Format> chooseExportDetails(const QString &fileName,
 
         QRegularExpression extensionFinder(QLatin1String("\\(\\*\\.([^\\)\\s]*)"));
         QRegularExpressionMatch match = extensionFinder.match(selectedFilter);
-        const QString extension = match.captured(1);
+        const QString extension = match.captured(1).trimmed();
 
         QString lastExportedFilePath = session.lastPath(Session::ExportedFile);
 
         suggestedFilename = lastExportedFilePath
-                            + QLatin1Char('/') + baseName
-                            + QLatin1Char('.') + extension;
+                            + QLatin1Char('/') + baseName;
+        if (!extension.isEmpty())
+            suggestedFilename += QLatin1Char('.') + extension;
     }
 
     // No need to confirm overwrite here since it'll be prompted below
@@ -2435,7 +2436,7 @@ void MainWindow::exportTilesetAs(TilesetDocument *tilesetDocument)
         fileName = tilesetDocument->tileset()->name();
     }
 
-    SessionOption<QString> lastUsedTilesetExportFilter { "lastUsedTilesetExportFilter" };
+    SessionOption<QString> lastUsedTilesetExportFilter { "tileset.lastUsedExportFilter" };
     QString selectedFilter = lastUsedTilesetExportFilter;
     auto exportDetails = chooseExportDetails<TilesetFormat>(fileName,
                                                             tilesetDocument->lastExportFileName(),
